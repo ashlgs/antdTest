@@ -42,6 +42,7 @@ axios.interceptors.response.use(
 );
 
 const checkStatus = (response) => {
+  console.log('check',response)
   // 未登录
   if (response.retCode === NOT_LOGIN || response.status === 401) {
     message.destroy();
@@ -65,6 +66,8 @@ const checkStatus = (response) => {
 };
 
 export default function request(url, option) {
+  console.log('url',url)
+  console.log(option)
   // 未登录
   if ((!store('token')) && (url !== '/admin/login')) {
     message.destroy();
@@ -96,9 +99,9 @@ export default function request(url, option) {
     newOptions.headers = {
       ...newOptions.headers,
     };
-    if (option.contentType) {
+    if(option.contentType){
       newOptions.headers["Content-Type"] = 'application/json;charset=UTF-8'
-    } else {
+    }else{
       newOptions.data = qs.stringify(newOptions.body || newOptions.data, {
         allowDots: true,
       });
@@ -106,11 +109,12 @@ export default function request(url, option) {
   }
 
   if (newOptions.method === 'DELETE') {
-    newOptions.headers = {
+    newOptions.headers ={
       ...newOptions.headers,
       'Content-Type': 'application/json;charset=UTF-8',
     }
   }
+  console.log('newOptions**:',newOptions)
 
   return (
     axios(BASE_URL + url, newOptions)
